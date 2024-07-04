@@ -2,15 +2,11 @@ package Principal;
 
 import Archivos.GeneracionDeHistorial;
 import Calculos.CalculoConversion;
-import Conexion.ConsultaMoneda;
-import Modelos.Moneda;
+
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
-import java.sql.SQLOutput;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Scanner;
+import java.util.*;
 
 public class PrincipalConversor {
     public static void main(String[] args) {
@@ -25,6 +21,9 @@ public class PrincipalConversor {
         Gson gson = new GsonBuilder()
                 .setPrettyPrinting()
                 .create();
+        Date now = new Date();
+        String fechaHoraActualizacion;
+        Map<String, String> conversion = new HashMap<>();
       try {
 
           while (true){
@@ -43,14 +42,25 @@ public class PrincipalConversor {
                 String respuesta = calculoConversion.ConvertirMoneda(monedaAConvertir,monedaDeDestino,cantidadAConvertir);
 
                 System.out.println("Conversion: " +respuesta);
+                fechaHoraActualizacion = String.format("%tF %<tT", now);
 
-                listaDeMonedas.add(gson.toJson(respuesta));
+
+                conversion.put( "registro: ", respuesta);
+                conversion.put( "registrado en: ", fechaHoraActualizacion);
+
+                String jsonConversion = gson.toJson(conversion);
+
+                listaDeMonedas.add(jsonConversion);
 
                 System.out.println("Si desea salir del programa, digite la palabra: salir");
                 System.out.println("Si desea seguir convirtiendo presione la tecla enter");
-                String estado = permanecerEnElFlujo.nextLine();
+                String estado = permanecerEnElFlujo.nextLine().trim();
                 if (estado.equals("salir")) break;
-            }catch (RuntimeException e){
+            }catch (InputMismatchException e){
+                System.out.println("Error: por favor, ingrese una cantidad valida.");
+                cantidadAConvertirScanner.next();
+            }
+            catch (RuntimeException e){
                 System.out.println("Ocurrio un error : "+e.getMessage());
             }
           }
