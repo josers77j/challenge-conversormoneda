@@ -5,9 +5,14 @@ import Modelos.Moneda;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class CalculoConversion {
 
     public String ConvertirMoneda(String monedaAConvertir, String monedaDeDestino,double cantidadAConvertir){
+
+
 
         ConsultaMoneda consultaMoneda = new ConsultaMoneda();
         String message = consultaMoneda.consultaDeMoneda(monedaAConvertir);
@@ -23,6 +28,9 @@ public class CalculoConversion {
 
         double conversion = cantidadAConvertir * md;
 
-        return String.format("La conversion de %.2f %s a %s es de %.2f %s" , cantidadAConvertir, monedaAConvertir, monedaDeDestino, conversion,monedaDeDestino);
+        String respuesta = String.format("La conversion de %.2f %s a %s es de %.2f %s" , cantidadAConvertir, monedaAConvertir, monedaDeDestino, conversion,monedaDeDestino);
+
+
+        return respuesta;
     }
 }
